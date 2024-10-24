@@ -887,24 +887,22 @@
                         return acc;
                     }, 0);
 
-                    // 12:00 - 12:59 と 17:00 - 18:29 と 19:01 - 20:00 ✕に設定（全ての曜日）
-                    if (
-                        (
-                            // 12:00 - 12:59 の時間帯
-                            (slotStart.getHours() === 12 && slotStart.getMinutes() >= 0 && slotStart.getMinutes() < 60) ||
-                            // 17:00 - 18:29 の時間帯
-                            (slotStart.getHours() === 17 && slotStart.getMinutes() >= 0) ||
-                            (slotStart.getHours() === 18 && slotStart.getMinutes() < 30) ||
-                            // 19:01 - 20:00 の時間帯
-                            (slotStart.getHours() === 19 && slotStart.getMinutes() > 0) ||
-                            (slotStart.getHours() === 20 && slotStart.getMinutes() === 0)
-                        )
-                    ) {
-                        cell.textContent = '✕';
-                        cell.classList.add('unavailable');
-                        cell.setAttribute('data-date', slotStart.toISOString());
-                        continue;
-                    }
+        // 12:00 - 12:59、17:00 - 18:29、19:01 - 20:00 の時間帯は✕に設定
+        if (
+            (
+                (slotStart.getHours() === 12 && slotStart.getMinutes() >= 0 && slotStart.getMinutes() < 60) ||
+                (slotStart.getHours() === 17 && slotStart.getMinutes() >= 0) ||
+                (slotStart.getHours() === 18 && slotStart.getMinutes() < 30) ||
+                (slotStart.getHours() === 19 && slotStart.getMinutes() > 0) ||
+                (slotStart.getHours() === 20 && slotStart.getMinutes() === 0)
+            ) &&
+            !isBusinessEventTime // "営業日"のイベントがない場合のみ✕にする
+        ) {
+            cell.textContent = '✕';
+            cell.classList.add('unavailable');
+            cell.setAttribute('data-date', slotStart.toISOString());
+            continue;
+        }
                     // 営業日のイベント時間内に他のイベントがある場合
                     if (isBusinessEventTime && count > 0) {
                         cell.textContent = '✕';
