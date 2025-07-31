@@ -1283,47 +1283,44 @@ function submitForm() {
             return `${date.getFullYear()}年${('0' + (date.getMonth() + 1)).slice(-2)}月${('0' + date.getDate()).slice(-2)}日 ${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`;
         }
 
-        async function fetchAvailability(date) {
-            const startTime = new Date(date);
-            const endTime = new Date(date);
-            endTime.setDate(endTime.getDate() + 7);
+async function fetchAvailability(date) {
+    const startTime = new Date(date);
+    const endTime = new Date(date);
+    endTime.setDate(endTime.getDate() + 7);
 
-            const cacheKey = startTime.toISOString() + endTime.toISOString();
+    // キャッシュキー（日付部分のみ）
+    const keyStart = startTime.toISOString().split('T')[0];
+    const keyEnd = endTime.toISOString().split('T')[0];
+    const cacheKey = `${keyStart}_${keyEnd}`;
 
-            // キャッシュを確認
-            if (availabilityCache[cacheKey]) {
-                console.log('Using cached data');
-                updateCalendar(availabilityCache[cacheKey].availability, availabilityCache[cacheKey].businessDays);
-                return;
-            }
+    if (availabilityCache[cacheKey]) {
+        console.log('Using cached data');
+        updateCalendar(availabilityCache[cacheKey].availability, availabilityCache[cacheKey].businessDays);
+        return;
+    }
 
-            const url = 'https://script.google.com/macros/s/AKfycbwFXkzSMHXCxABk1fphGCVASsLcEDMky6WdbfrUSgy5MEGheIW2u9Lf85GsziJgu6vwFg/exec' +
-                `?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`;
+    try {
+        showLoadingSpinner();
 
-            try {
-                showLoadingSpinner(); // Show loading spinner
-                const response = await fetch(url);
-                const data = await response.json();
-                console.log(data);
+        const url = `https://script.google.com/macros/s/AKfycbyx3_ZMNDhnfYtVlsfPlleB73KJsgaOxKX-66sCvik6O3XWcBSC2ijJnatlPd11ORLB/exec?startTime=${startTime.toISOString()}&endTime=${endTime.toISOString()}`;
+        const response = await fetch(url, { cache: "no-store" }); // 明示的にキャッシュ回避（ブラウザ側）
+        const data = await response.json();
 
-                // 営業日の情報を抽出
-                const businessDays = data.filter(event => event.summary === "営業日").map(event => {
-                    return {
-                        start: new Date(event.startTime),
-                        end: new Date(event.endTime)
-                    };
-                });
+        const businessDays = data
+            .filter(event => event.summary === "営業日")
+            .map(event => ({
+                start: new Date(event.startTime),
+                end: new Date(event.endTime)
+            }));
 
-                // データをキャッシュに保存
-                availabilityCache[cacheKey] = { availability: data, businessDays: businessDays };
-
-                updateCalendar(data, businessDays);
-            } catch (error) {
-                console.error('Error fetching availability:', error);
-            } finally {
-                hideLoadingSpinner(); // Hide loading spinner
-            }
-        }
+        availabilityCache[cacheKey] = { availability: data, businessDays };
+        updateCalendar(data, businessDays);
+    } catch (err) {
+        console.error("Fetch error:", err);
+    } finally {
+        setTimeout(hideLoadingSpinner, 500);  // 体感を良くするためわずかに遅延
+    }
+}
 
         function updateCalendar(availability, businessDays) {
             const calendar = document.getElementById('calendar1');
