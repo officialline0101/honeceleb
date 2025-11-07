@@ -15,7 +15,7 @@
             /* さらに右へ */
             top: 80%;
             /* 画面中央に固定 */
-            transform: translateY(-50%) translateX(13px);
+            transform: translateY(-50%) translateX(15px);
             /* 中央配置と右ずらし */
             background: #2ebddb;
             display: flex;
@@ -96,7 +96,7 @@
             background-color: #fdfdfd;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            width: 90%;
+            width: 95%;
             max-width: 500px;
             padding: 25px;
             box-sizing: border-box;
@@ -483,33 +483,30 @@
             /* 太文字に設定 */
         }
 
-        .info-text {
-            margin-top: 20px;
-            /* 上の余白 */
-            margin-bottom: 10px;
-            /* 下に白い隙間を追加 */
-            font-size: 13px;
-            color: #000000;
-            line-height: 1.5;
-            text-align: center;
-            word-wrap: break-word;
-            background-color: #eef9f5;
-            /* 青っぽい背景色を追加 */
-            padding: 10px;
-            border-radius: 4px;
-        }
+.info-text {
+    width: 100%; /* 横幅いっぱいに広げる */
+    display: block; /* ブロック要素として扱う */
+    box-sizing: border-box; /* padding・borderを含めて幅を計算 */
+    margin-top: 0px; /* 上の余白 */
+    margin-bottom: 0px; /* 下の余白 */
+    font-size: 13px;
+    color: #000000;
+    line-height: 1.5;
+    text-align: center;
+    word-wrap: break-word;
+    background-color: #eef9f5; /* 背景色 */
+    padding: 10px;
+    border-radius: 4px;
+}
 
-        /* 携帯端末向けのレスポンシブデザイン */
-        @media (max-width: 768px) {
-            .info-text {
-                font-size: 11.5px;
-                /* スマホでは少し小さく */
-                margin-top: 10px;
-                /* 上下のマージンを調整 */
-                line-height: 2.0;
-                /* テキストの高さ調整 */
-            }
-        }
+/* 携帯端末向けのレスポンシブデザイン */
+@media (max-width: 768px) {
+    .info-text {
+        font-size: 11.5px; /* スマホでは少し小さく */
+        margin-top: 0px; /* 上の余白を縮める */
+        line-height: 1.0; /* 行間を広く */
+    }
+}
 
         .symptoms,
         .options {
@@ -767,12 +764,30 @@
                 <span class="highlight-text">◆カイロプラクティック◆</span>
             </div>
             <div class="symptoms">
-                <button type="button" onclick="selectSymptom(this, 'treatment1')" data-price="15000">初回</button>
-                <button type="button" onclick="selectSymptom(this, 'treatment2')" data-price="15000">2回目以降</button>
+                <button type="button" onclick="selectSymptom(this, 'treatment1')" data-price="15000">一般</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment3')" data-price="15000">18歳未満</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment4')" data-price="15000">12歳未満</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment4')" data-price="15000">8歳未満</button>
                 <button type="button" onclick="selectSymptom(this, 'treatment4')" data-price="15000">産後ケア</button>
+            </div>
+            <div class="highlight-background">
+                <span class="highlight-text">オプション</span>
+            </div>
+            <div class="irradiations">
+                <button type="button" id="firstirradiations" onclick="selectirradiations(this)" data-price="15000">小顔調整(顎関節の調整も可)</button>
+                <div class="info-text">料金：1,500円</div>
+                <button type="button" id="repeatirradiations" onclick="selectirradiations(this)" data-price="15000">ヘッドマッサージ.</button>
+                <div class="info-text">料金：3,500円(税込)</div>
+                <button type="button" id="sanirradiations" onclick="selectirradiations(this)" data-price="15000">パーソナルトレーニング</button>
+                <div class="info-text">料金：1,500円(税込)</div>
+                <button type="button" id="yonirradiations" onclick="selectirradiations(this)" data-price="15000">究極の肩こり改善</button>
+                <div class="info-text">料金：5,500円(税込)</div>
+                <button type="button" id="goirradiations" onclick="selectirradiations(this)" data-price="15000">究極の腰痛改善</button>
+                <div class="info-text">料金：5,500円(税込)</div>
+                <button type="button" id="rokuirradiations" onclick="selectirradiations(this)" data-price="15000">【むくみケア】足首・ふくらはぎスッキリ</button>
+                <div class="info-text">料金：2,200円(税込)</div>
+                <button type="button" id="sitiirradiations" onclick="selectirradiations(this)" data-price="15000">【足裏ケア】土踏まず・かかとケア</button>
+                <div class="info-text">料金：1,100円(税込)</div>
             </div>
         </div>
 
@@ -797,13 +812,21 @@
             </div>
             <div class="irradiations">
                 <button type="button" id="firstirradiations" onclick="selectirradiations(this)" data-price="15000">ヘッドマッサージ</button>
+                <div class="info-text">料金：3,500円(税込)</div>
                 <button type="button" id="repeatirradiations" onclick="selectirradiations(this)" data-price="15000">パーソナルトレーニング</button>
-                <button type="button" id="sanirradiations" onclick="selectirradiations(this)" data-price="15000">むくみケア～顔</button>
-                <button type="button" id="yonirradiations" onclick="selectirradiations(this)" data-price="15000">むくみケア～ウエストはみ肉</button>
-                <button type="button" id="goirradiations" onclick="selectirradiations(this)" data-price="15000">むくみケア～二の腕の振り袖さよなら</button>
-                <button type="button" id="rokuirradiations" onclick="selectirradiations(this)" data-price="15000">むくみケア～背中すっきり</button>
-                <button type="button" id="sitiirradiations" onclick="selectirradiations(this)" data-price="15000">むくみケア～おしり・太ももすっきり</button>
-                <button type="button" id="hatiirradiations" onclick="selectirradiations(this)" data-price="15000">むくみケア～足首・アキレス腱すっきり</button>
+                <div class="info-text">料金：1,500円(税込)</div>
+                <button type="button" id="sanirradiations" onclick="selectirradiations(this)" data-price="15000">【むくみケア】顔</button>
+                <div class="info-text">料金：3,300円(税込)</div>
+                <button type="button" id="yonirradiations" onclick="selectirradiations(this)" data-price="15000">【むくみケア】ウエストはみ肉</button>
+                <div class="info-text">料金：3,300円(税込)</div>
+                <button type="button" id="goirradiations" onclick="selectirradiations(this)" data-price="15000">【むくみケア】二の腕の振袖さよなら</button>
+                <div class="info-text">料金：3,300円(税込)</div>
+                <button type="button" id="rokuirradiations" onclick="selectirradiations(this)" data-price="15000">【むくみケア】背中スッキリ</button>
+                <div class="info-text">料金：3,300円(税込)</div>
+                <button type="button" id="sitiirradiations" onclick="selectirradiations(this)" data-price="15000">【むくみケア】おしり・太ももスッキリ</button>
+                <div class="info-text">料金：3,300円(税込)</div>
+                <button type="button" id="hatiirradiations" onclick="selectirradiations(this)" data-price="15000">【むくみケア】足首・ふくらはぎスッキリ</button>
+                <div class="info-text">料金：2,200円(税込)</div>
             </div>
         </div>
 
@@ -894,14 +917,21 @@
 
         // 訪問回数ごとの時間設定 (例：初めて=20分、2回目以降=15分)
         let irradiationsTimes = {
+            '小顔調整(顎関節の調整も可)': 15,
+            'ヘッドマッサージ.': 15,
+            'パーソナルトレーニング': 15,
+            '究極の肩こり改善': 15,
+            '究極の腰痛改善': 15,
+            '【むくみケア】足首・ふくらはぎスッキリ': 15,
+            '【足裏ケア】土踏まず・かかとケア': 15,
             'ヘッドマッサージ': 20,
             'パーソナルトレーニング': 20,
-            'むくみケア～顔': 90,
-            'むくみケア～ウエストはみ肉': 90,
-            'むくみケア～二の腕の振り袖さよなら': 90,
-            'むくみケア～背中すっきり': 90,
-            'むくみケア～おしり・太ももすっきり': 90,
-            'むくみケア～足首・アキレス腱すっきり': 60
+            '【むくみケア】顔': 90,
+            '【むくみケア】ウエストはみ肉': 90,
+            '【むくみケア】二の腕の振袖さよなら': 90,
+            '【むくみケア】背中スッキリ': 90,
+            '【むくみケア】おしり・太ももスッキリ': 90,
+            '【むくみケア】足首・ふくらはぎスッキリ': 60
         };
 
         let selectedirradiationsTime = 0; // 訪問回数で選択された時間
@@ -909,6 +939,7 @@
         let menuTimes = {
             '初回': 90,
             '2回目以降': 60,
+            '一般': 60,
             '18歳未満': 60,
             '12歳未満': 30,
             '8歳未満': 15,
